@@ -1,0 +1,25 @@
+echo "enter splunk user:"
+
+read suser
+
+echo "enter splunk passwd:"
+
+read spass
+#ssh stuff
+#su - suser -c "echo | ssh-keygen -t rsa -P \"\""
+#cat /home/suser/.ssh/id_rsa.pub >> /home/hduser/.ssh/authorized_keys
+#su - suser -c "ssh -o StrictHostKeyChecking=no localhost echo "# login once, to add to known hosts
+echo "su to root ,make sure /etc/sudoers has ALL = (ALL) NOPASSWD: ALL for the user's group or use the command below:"
+sudo su - <$spass
+pwd
+wget -O splunk-8.0.6-152fb4b2bb96-linux-2.6-x86_64.rpm 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.6&product=splunk&filename=splunk-8.0.6-152fb4b2bb96-linux-2.6-x86_64.rpm&wget=true'
+yum localinstall splunk-8.0.6-152fb4b2bb96-linux-2.6-x86_64.rpm -y
+#
+
+sudo echo -e  "[user_info]\nUSERNAME = $suser \nPASSWORD = $spass">/opt/splunk/etc/system/local/user-seed.conf
+cat  /opt/splunk/etc/system/local/user-seed.conf
+/opt/splunk/bin/splunk enable boot-start --accept-license
+
+
+/opt/splunk/bin/splunk start --accept-license
+
